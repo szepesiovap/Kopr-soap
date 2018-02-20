@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="return" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 public class PridajUcastnikaResponse {
 
     @XmlElement(name = "return")
-    protected Long _return;
+    protected String _return;
 
     /**
      * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public Long getReturn() {
+    public String getReturn() {
         return _return;
     }
 
@@ -52,10 +52,10 @@ public class PridajUcastnikaResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public void setReturn(Long value) {
+    public void setReturn(String value) {
         this._return = value;
     }
 

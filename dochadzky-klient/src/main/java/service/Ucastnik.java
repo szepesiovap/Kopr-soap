@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="meno" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="priezvisko" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Ucastnik {
 
-    protected Long id;
+    protected String id;
     protected String meno;
     protected String priezvisko;
 
@@ -44,10 +44,10 @@ public class Ucastnik {
      * 
      * @return
      *     possible object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -56,10 +56,10 @@ public class Ucastnik {
      * 
      * @param value
      *     allowed object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public void setId(Long value) {
+    public void setId(String value) {
         this.id = value;
     }
 

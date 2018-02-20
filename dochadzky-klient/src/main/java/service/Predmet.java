@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="nazov" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Predmet {
 
-    protected Long id;
+    protected String id;
     protected String nazov;
 
     /**
@@ -41,10 +41,10 @@ public class Predmet {
      * 
      * @return
      *     possible object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -53,10 +53,10 @@ public class Predmet {
      * 
      * @param value
      *     allowed object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public void setId(Long value) {
+    public void setId(String value) {
         this.id = value;
     }
 

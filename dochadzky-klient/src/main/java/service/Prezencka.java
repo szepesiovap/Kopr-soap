@@ -19,7 +19,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="datum" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="predmet" type="{http://service/}predmet" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -39,7 +39,7 @@ public class Prezencka {
 
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar datum;
-    protected Long id;
+    protected String id;
     protected Predmet predmet;
 
     /**
@@ -71,10 +71,10 @@ public class Prezencka {
      * 
      * @return
      *     possible object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -83,10 +83,10 @@ public class Prezencka {
      * 
      * @param value
      *     allowed object is
-     *     {@link Long }
+     *     {@link String }
      *     
      */
-    public void setId(Long value) {
+    public void setId(String value) {
         this.id = value;
     }
 

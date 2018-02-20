@@ -38,7 +38,22 @@ public interface DochadzkyService {
     @Action(input = "http://service/DochadzkyService/dajPredmetRequest", output = "http://service/DochadzkyService/dajPredmetResponse")
     public Predmet dajPredmet(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        String arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "pridajPredmet", targetNamespace = "http://service/", className = "service.PridajPredmet")
+    @ResponseWrapper(localName = "pridajPredmetResponse", targetNamespace = "http://service/", className = "service.PridajPredmetResponse")
+    @Action(input = "http://service/DochadzkyService/pridajPredmetRequest", output = "http://service/DochadzkyService/pridajPredmetResponse")
+    public String pridajPredmet(
+        @WebParam(name = "arg0", targetNamespace = "")
+        Predmet arg0);
 
     /**
      * 
@@ -54,36 +69,21 @@ public interface DochadzkyService {
 
     /**
      * 
-     * @param arg0
-     * @return
-     *     returns java.lang.Long
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "pridajPredmet", targetNamespace = "http://service/", className = "service.PridajPredmet")
-    @ResponseWrapper(localName = "pridajPredmetResponse", targetNamespace = "http://service/", className = "service.PridajPredmetResponse")
-    @Action(input = "http://service/DochadzkyService/pridajPredmetRequest", output = "http://service/DochadzkyService/pridajPredmetResponse")
-    public Long pridajPredmet(
-        @WebParam(name = "arg0", targetNamespace = "")
-        Predmet arg0);
-
-    /**
-     * 
      * @param arg1
      * @param arg0
      * @return
-     *     returns java.lang.Long
+     *     returns java.lang.String
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "pridajPrezencku", targetNamespace = "http://service/", className = "service.PridajPrezencku")
     @ResponseWrapper(localName = "pridajPrezenckuResponse", targetNamespace = "http://service/", className = "service.PridajPrezenckuResponse")
     @Action(input = "http://service/DochadzkyService/pridajPrezenckuRequest", output = "http://service/DochadzkyService/pridajPrezenckuResponse")
-    public Long pridajPrezencku(
+    public String pridajPrezencku(
         @WebParam(name = "arg0", targetNamespace = "")
         Prezencka arg0,
         @WebParam(name = "arg1", targetNamespace = "")
-        List<Long> arg1);
+        List<String> arg1);
 
     /**
      * 
@@ -98,7 +98,7 @@ public interface DochadzkyService {
     @Action(input = "http://service/DochadzkyService/dajPrezenckuRequest", output = "http://service/DochadzkyService/dajPrezenckuResponse")
     public Prezencka dajPrezencku(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        String arg0);
 
     /**
      * 
@@ -131,14 +131,14 @@ public interface DochadzkyService {
      * 
      * @param arg0
      * @return
-     *     returns java.lang.Long
+     *     returns java.lang.String
      */
     @WebMethod
     @WebResult(targetNamespace = "")
     @RequestWrapper(localName = "pridajUcastnika", targetNamespace = "http://service/", className = "service.PridajUcastnika")
     @ResponseWrapper(localName = "pridajUcastnikaResponse", targetNamespace = "http://service/", className = "service.PridajUcastnikaResponse")
     @Action(input = "http://service/DochadzkyService/pridajUcastnikaRequest", output = "http://service/DochadzkyService/pridajUcastnikaResponse")
-    public Long pridajUcastnika(
+    public String pridajUcastnika(
         @WebParam(name = "arg0", targetNamespace = "")
         Ucastnik arg0);
 
@@ -155,7 +155,7 @@ public interface DochadzkyService {
     @Action(input = "http://service/DochadzkyService/dajUcastnikaRequest", output = "http://service/DochadzkyService/dajUcastnikaResponse")
     public Ucastnik dajUcastnika(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        String arg0);
 
     /**
      * 
@@ -194,7 +194,7 @@ public interface DochadzkyService {
     @Action(input = "http://service/DochadzkyService/vymazPredmetRequest", output = "http://service/DochadzkyService/vymazPredmetResponse")
     public void vymazPredmet(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        String arg0);
 
     /**
      * 
@@ -206,7 +206,7 @@ public interface DochadzkyService {
     @Action(input = "http://service/DochadzkyService/vymazPrezenckuRequest", output = "http://service/DochadzkyService/vymazPrezenckuResponse")
     public void vymazPrezencku(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        String arg0);
 
     /**
      * 
@@ -218,6 +218,6 @@ public interface DochadzkyService {
     @Action(input = "http://service/DochadzkyService/vymazUcastnikaRequest", output = "http://service/DochadzkyService/vymazUcastnikaResponse")
     public void vymazUcastnika(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        String arg0);
 
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -20,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="arg0" type="{http://service/}prezencka" minOccurs="0"/>
- *         &lt;element name="arg1" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="arg1" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 public class PridajPrezencku {
 
     protected Prezencka arg0;
-    @XmlElement(type = Long.class)
-    protected List<Long> arg1;
+    protected List<String> arg1;
 
     /**
      * Gets the value of the arg0 property.
@@ -82,13 +80,13 @@ public class PridajPrezencku {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Long }
+     * {@link String }
      * 
      * 
      */
-    public List<Long> getArg1() {
+    public List<String> getArg1() {
         if (arg1 == null) {
-            arg1 = new ArrayList<Long>();
+            arg1 = new ArrayList<String>();
         }
         return this.arg1;
     }

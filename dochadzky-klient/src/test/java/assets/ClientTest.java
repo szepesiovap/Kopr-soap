@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -35,7 +36,7 @@ public class ClientTest {
         dochadzkyService = service.getDochadzkyServicePort();
     }
 
-    /**
+     /**
      * Test of pridajPredmet method, of class DochadzkyService.
      */
     @Test
@@ -45,16 +46,15 @@ public class ClientTest {
         Predmet novyPredmet = new Predmet();
         novyPredmet.setNazov("Systémové programovanie");
 
-        long idNovehoPredmetu = dochadzkyService.pridajPredmet(novyPredmet);
+        String idNovehoPredmetu = dochadzkyService.pridajPredmet(novyPredmet);
         int pocetPredmetovPoPridani = dochadzkyService.dajPredmety().size();
         Predmet predmetVDatabaze = dochadzkyService.dajPredmet(idNovehoPredmetu);
 
-        Assert.assertTrue(idNovehoPredmetu == predmetVDatabaze.getId());
+        Assert.assertEquals(idNovehoPredmetu,predmetVDatabaze.getId());
         Assert.assertEquals("Systémové programovanie", predmetVDatabaze.getNazov());
         Assert.assertEquals(povodnyPocetPredmetov + 1, pocetPredmetovPoPridani);
 
         dochadzkyService.vymazPredmet(idNovehoPredmetu);
-        
         int pocetPredmetovPoVymazani = dochadzkyService.dajPredmety().size();
 
         try {
@@ -71,9 +71,10 @@ public class ClientTest {
      */
     @Test
     public void testDajPredmet() {
-        long id = 1L;
+        String id = "aab5d5fd-70c1-11e5-a4fb-b026b977eb01";
         Predmet predmet = dochadzkyService.dajPredmet(id);
-        assertTrue(predmet.getId() == id && predmet.getNazov().equals("Matematická analýza"));
+        assertEquals(predmet.getId(),id);
+        Assert.assertEquals(predmet.getNazov(),"Matematická analýza");
     }
 
     /**
@@ -92,7 +93,7 @@ public class ClientTest {
     public void testPridajAVymazPrezencku() {
         int povodnyPocetPrezenciek = dochadzkyService.dajPrezencky().size();
 
-        long idPredmetu = 1L;
+        String idPredmetu = "aab5d5fd-70c1-11e5-a4fb-b026b977eb01";
         Predmet predmet = new Predmet();
         predmet.setId(idPredmetu);
 
@@ -107,7 +108,7 @@ public class ClientTest {
 
         GregorianCalendar calendar = new GregorianCalendar(rok, mesiac - 1, den, hod, min);
         Date datum = new Date(calendar.getTime().getTime());
-
+        
         XMLGregorianCalendar xmlDatum = null;
 
         try {
@@ -118,25 +119,24 @@ public class ClientTest {
 
         novaPrezencka.setDatum(xmlDatum/*datum*/);
 
-        List<Long> listUcastnikov = new ArrayList<Long>();
-        listUcastnikov.add(1L);
-        listUcastnikov.add(3L);
-        listUcastnikov.add(5L);
+        List<String> listUcastnikov = new ArrayList<String>();
+        listUcastnikov.add("bbb5d5fd-70c1-11e5-a4fb-b026b977eb01");
+        listUcastnikov.add("bbb5d5fd-70c1-11e5-a4fb-b026b977eb03");
+        listUcastnikov.add("bbb5d5fd-70c1-11e5-a4fb-b026b977eb05");
 
-        long idNovejPrezencky = dochadzkyService.pridajPrezencku(novaPrezencka, listUcastnikov);
+        String idNovejPrezencky = dochadzkyService.pridajPrezencku(novaPrezencka, listUcastnikov);
         int pocetPrezenciekPoPridani = dochadzkyService.dajPrezencky().size();
         Prezencka prezenckaVDatabaze = dochadzkyService.dajPrezencku(idNovejPrezencky);
 
-        Assert.assertTrue(idNovejPrezencky == prezenckaVDatabaze.getId());
+        Assert.assertEquals(idNovejPrezencky, prezenckaVDatabaze.getId());
         Assert.assertEquals("Matematická analýza", prezenckaVDatabaze.getPredmet().getNazov());
         Assert.assertEquals(xmlDatum, prezenckaVDatabaze.getDatum());
         Assert.assertEquals(povodnyPocetPrezenciek + 1, pocetPrezenciekPoPridani);
         Assert.assertEquals(3, dochadzkyService.dajUcastnikovNaPrezencke(prezenckaVDatabaze).size());
 
         dochadzkyService.vymazPrezencku(idNovejPrezencky);
-        
-        int pocetPrezenciekPoVymazani = dochadzkyService.dajPrezencky().size();
 
+        int pocetPrezenciekPoVymazani = dochadzkyService.dajPrezencky().size();
         try {
             Prezencka vymazanaPrezencka = dochadzkyService.dajPrezencku(idNovejPrezencky);
             Assert.fail("Vyhladavanie vymazanej prezencky nevyhodilo vynimku.");
@@ -151,10 +151,10 @@ public class ClientTest {
      */
     @Test
     public void testDajPrezencku() {
-        Long id = 2L;
+        String id = "ccc5d5fd-70c1-11e5-a4fb-b026b977eb02";
         Prezencka prezencka = dochadzkyService.dajPrezencku(id);
 
-        Assert.assertTrue(id == prezencka.getId());
+        Assert.assertEquals(id, prezencka.getId());
 
         int rok = 2018;
         int mesiac = 1;
@@ -163,11 +163,9 @@ public class ClientTest {
         int min = 30;
 
         GregorianCalendar calendar = new GregorianCalendar(rok, mesiac - 1, den, hod, min);
-        //Date datum = new Date(calendar.getTime().getTime());
-        
+        Date datum = new Date(calendar.getTime().getTime());
         XMLGregorianCalendar xmlDatum = null;
-
-        try {
+         try {
             xmlDatum = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
         } catch (DatatypeConfigurationException ex) {
             //
@@ -195,7 +193,7 @@ public class ClientTest {
      */
     @Test
     public void testDajPrezenckyUcastnika() {
-        long id = 2l;
+        String id = "bbb5d5fd-70c1-11e5-a4fb-b026b977eb02";
         Ucastnik ucastnik = new Ucastnik();
         ucastnik.setId(id);
 
@@ -217,17 +215,17 @@ public class ClientTest {
         Ucastnik novyUcastnik = new Ucastnik();
         novyUcastnik.setMeno("Harry");
         novyUcastnik.setPriezvisko("Potter");
-        long idNovehoUcastnika = dochadzkyService.pridajUcastnika(novyUcastnik);
+        String idNovehoUcastnika = dochadzkyService.pridajUcastnika(novyUcastnik);
         int pocetUcastnikovPoPridani = dochadzkyService.dajUcastnikov().size();
         Ucastnik ucastnikVDatabaze = dochadzkyService.dajUcastnika(idNovehoUcastnika);
 
-        Assert.assertTrue(idNovehoUcastnika == ucastnikVDatabaze.getId());
+        Assert.assertEquals(idNovehoUcastnika, ucastnikVDatabaze.getId());
         Assert.assertEquals("Harry", ucastnikVDatabaze.getMeno());
         Assert.assertEquals("Potter", ucastnikVDatabaze.getPriezvisko());
         Assert.assertEquals(povodnyPocetUcastnikov + 1, pocetUcastnikovPoPridani);
 
         dochadzkyService.vymazUcastnika(idNovehoUcastnika);
-        
+
         int pocetUcastnikovPoVymazani = dochadzkyService.dajUcastnikov().size();
 
         try {
@@ -244,10 +242,10 @@ public class ClientTest {
      */
     @Test
     public void testDajUcastnika() {
-        long id = 1L;
+        String id = "bbb5d5fd-70c1-11e5-a4fb-b026b977eb01";
         Ucastnik ucastnik = dochadzkyService.dajUcastnika(id);
 
-        Assert.assertTrue(id == ucastnik.getId());
+        Assert.assertEquals(id, ucastnik.getId());
         Assert.assertEquals("Jozko", ucastnik.getMeno());
         Assert.assertEquals("Mrkvicka", ucastnik.getPriezvisko());
     }
@@ -270,7 +268,7 @@ public class ClientTest {
      */
     @Test
     public void testDajUcastnikovNaPrezencke() {
-        long id = 3l;
+        String id = "ccc5d5fd-70c1-11e5-a4fb-b026b977eb03";
         Prezencka prezencka = new Prezencka();
         prezencka.setId(id);
 
