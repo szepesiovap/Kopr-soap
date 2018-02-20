@@ -11,6 +11,7 @@ import exception.PredmetNotFoundException;
 import exception.PrezenckaNotFoundException;
 import exception.UcastnikNotFoundException;
 import java.util.List;
+import java.util.UUID;
 import javax.jws.WebService;
 
 @WebService(serviceName = "DochadzkyWebService")
@@ -26,11 +27,11 @@ public class DochadzkyService {
         mySQLPrezenckaDao = new MySQLPrezenckaDao();
     }
     
-    public Long pridajPredmet(Predmet predmet) {
+    public UUID pridajPredmet(Predmet predmet) {
         return mySQLPredmetDao.pridajPredmet(predmet);
     }
     
-    public Predmet dajPredmet(long id) throws PredmetNotFoundException {
+    public Predmet dajPredmet(UUID id) throws PredmetNotFoundException {
         return mySQLPredmetDao.dajPredmet(id);
     }
     
@@ -38,11 +39,11 @@ public class DochadzkyService {
         return mySQLPredmetDao.dajPredmety();
     }
     
-    public Long pridajPrezencku(Prezencka prezencka, List<Long> ucastnici) throws InvalidEntryDataException {
+    public UUID pridajPrezencku(Prezencka prezencka, List<UUID> ucastnici) throws InvalidEntryDataException {
         return mySQLPrezenckaDao.pridajPrezencku(prezencka, ucastnici);
     }
     
-    public Prezencka dajPrezencku(long id) throws PrezenckaNotFoundException {
+    public Prezencka dajPrezencku(UUID id) throws PrezenckaNotFoundException {
         return mySQLPrezenckaDao.dajPrezencku(id);
     }
     
@@ -54,11 +55,11 @@ public class DochadzkyService {
         return mySQLPrezenckaDao.dajPrezenckyUcastnika(ucastnik);
     }
     
-    public Long pridajUcastnika(Ucastnik ucastnik) {
+    public UUID pridajUcastnika(Ucastnik ucastnik) {
         return mySQLUcastnikDao.pridajUcastnika(ucastnik);
     }
     
-    public Ucastnik dajUcastnika(long id) throws UcastnikNotFoundException {
+    public Ucastnik dajUcastnika(UUID id) throws UcastnikNotFoundException {
         return mySQLUcastnikDao.dajUcastnika(id);
     }
     
@@ -70,15 +71,15 @@ public class DochadzkyService {
         return mySQLUcastnikDao.dajUcastnikovNaPrezencke(prezencka);
     }
     
-    public void vymazPredmet(long id) {
+    public void vymazPredmet(UUID id) {
         mySQLPredmetDao.vymazPredmet(id);
     }
     
-    public void vymazPrezencku(long id) {
+    public void vymazPrezencku(UUID id) {
         mySQLPrezenckaDao.vymazPrezencku(id);
     }
     
-    public void vymazUcastnika(long id) {
+    public void vymazUcastnika(UUID id) {
         mySQLUcastnikDao.vymazUcastnika(id);
     }
 }

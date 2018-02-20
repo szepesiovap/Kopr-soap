@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import rowmapper.PredmetRowMapper;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MySQLPredmetDao implements IPredmetDao {
 
@@ -22,24 +23,19 @@ public class MySQLPredmetDao implements IPredmetDao {
         predmetRowMapper = new PredmetRowMapper();
     }
 
-    public Long pridajPredmet(Predmet predmet) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("nazov", predmet.getNazov());
-
-        Number id = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("predmet")
-                .usingGeneratedKeyColumns("id")
-                .usingColumns("nazov")
-                .executeAndReturnKey(parameters);
-        return id.longValue();
+    public UUID pridajPredmet(Predmet predmet) {
+        String sql = "INSERT into predmet(id, nazov) VALUES (?,?)";
+        UUID id = UUID.randomUUID();       
+        jdbcTemplate.update(sql, id.toString(), predmet.getNazov());
+        return id;
     }
 
-    public Predmet dajPredmet(long id){
+    public Predmet dajPredmet(UUID id){
         String sql = "SELECT id, nazov FROM predmet WHERE id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, predmetRowMapper, id);
+            return jdbcTemplate.queryForObject(sql, predmetRowMapper, id.toString());
         } catch (EmptyResultDataAccessException e) {
-            throw new PredmetNotFoundException("Predmet s id "+id+" sa v databaze nenachadza.");
+            throw new PredmetNotFoundException("Predmet s id "+id.toString()+" sa v databaze nenachadza.");
         }
     }
 
@@ -48,8 +44,8 @@ public class MySQLPredmetDao implements IPredmetDao {
         return jdbcTemplate.query(sql, predmetRowMapper);
     }
 
-    public void vymazPredmet(long id) {
+    public void vymazPredmet(UUID id) {
         String sql = "DELETE FROM predmet WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(sql, id.toString());
     }
 }

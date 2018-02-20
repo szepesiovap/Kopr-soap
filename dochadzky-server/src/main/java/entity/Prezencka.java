@@ -1,15 +1,15 @@
 package entity;
 
-import java.sql.Time;
 import java.util.Date;
+import java.util.UUID;
 
 public class Prezencka {
 
-    private Long id;
+    private UUID id;
     private Date datum;
     private Predmet predmet;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -29,7 +29,7 @@ public class Prezencka {
         this.predmet = predmet;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 }

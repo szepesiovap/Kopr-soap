@@ -7,11 +7,10 @@ import entity.Ucastnik;
 import exception.UcastnikNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import rowmapper.UcastnikRowMapper;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MySQLUcastnikDao implements IUcastnikDao {
 
@@ -23,25 +22,19 @@ public class MySQLUcastnikDao implements IUcastnikDao {
         ucastnikRowMapper = new UcastnikRowMapper();
     }
 
-    public Long pridajUcastnika(Ucastnik ucastnik) {
-        MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("meno", ucastnik.getMeno())
-                .addValue("priezvisko", ucastnik.getPriezvisko());
-
-        Number id = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("ucastnik")
-                .usingGeneratedKeyColumns("id")
-                .usingColumns("meno","priezvisko")
-                .executeAndReturnKey(parameters);
-        return id.longValue();
+    public UUID pridajUcastnika(Ucastnik ucastnik) {
+        String sql = "INSERT into ucastnik(id, meno, priezvisko) VALUES (?,?,?)";
+        UUID id = UUID.randomUUID();       
+        jdbcTemplate.update(sql, id.toString(), ucastnik.getMeno(), ucastnik.getPriezvisko());
+        return id;
     }
 
-    public Ucastnik dajUcastnika(long id) {
+    public Ucastnik dajUcastnika(UUID id) {
         String sql = "SELECT id as ucastnik_id, meno as ucastnik_meno, priezvisko as ucastnik_priezvisko FROM ucastnik WHERE id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, ucastnikRowMapper, id);
+            return jdbcTemplate.queryForObject(sql, ucastnikRowMapper, id.toString());
         } catch (EmptyResultDataAccessException e) {
-            throw new UcastnikNotFoundException("Ucastnik s id "+id+" sa v databaze nenachadza.");
+            throw new UcastnikNotFoundException("Ucastnik s id "+id.toString()+" sa v databaze nenachadza.");
         }
     }
 
@@ -55,11 +48,11 @@ public class MySQLUcastnikDao implements IUcastnikDao {
                 "ucastnik.priezvisko as ucastnik_priezvisko FROM ucastnik " +
                 "JOIN dochadzka on ucastnik.id = dochadzka.id_ucastnika " +
                 "WHERE dochadzka.id_prezencky = ?";
-        return jdbcTemplate.query(sql, ucastnikRowMapper, prezencka.getId());
+        return jdbcTemplate.query(sql, ucastnikRowMapper, prezencka.getId().toString());
     }
 
-    public void vymazUcastnika(long id) { 
+    public void vymazUcastnika(UUID id) { 
         String sql = "DELETE FROM ucastnik WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(sql, id.toString());
     }
 }

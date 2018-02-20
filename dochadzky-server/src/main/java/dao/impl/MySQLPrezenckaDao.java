@@ -8,11 +8,10 @@ import exception.InvalidEntryDataException;
 import exception.PrezenckaNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import rowmapper.PrezenckaRowMapper;
 
 import java.util.List;
+import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 
 public class MySQLPrezenckaDao implements IPrezenckaDao {
@@ -25,47 +24,40 @@ public class MySQLPrezenckaDao implements IPrezenckaDao {
         prezenckaRowMapper = new PrezenckaRowMapper();
     }
 
-    public Long pridajPrezencku(Prezencka prezencka, List<Long> ucastnici) {
-        long idPrezencky = -1;
+    public UUID pridajPrezencku(Prezencka prezencka, List<UUID> ucastnici) {
+        UUID idPrezencky = null;
         try {
-            MapSqlParameterSource parameters = new MapSqlParameterSource()
-                    .addValue("datum", prezencka.getDatum())
-                    .addValue("id_predmetu", prezencka.getPredmet().getId());
+        String sql = "INSERT into prezencka(id, datum, id_predmetu) VALUES (?,?,?)";
+        idPrezencky = UUID.randomUUID();       
+        jdbcTemplate.update(sql, idPrezencky.toString(), prezencka.getDatum(), prezencka.getPredmet().getId().toString());
 
-            Number id = new SimpleJdbcInsert(jdbcTemplate)
-                    .withTableName("prezencka")
-                    .usingGeneratedKeyColumns("id")
-                    .usingColumns("datum", "id_predmetu")
-                    .executeAndReturnKey(parameters);
-
-            idPrezencky = id.longValue();
         } catch (Exception e) {
-            throw new InvalidEntryDataException("Prezencka nebola ulozena. Predmet s id " + prezencka.getPredmet().getId() + " v databaze neexistuje.");
+            throw new InvalidEntryDataException("Prezencka nebola ulozena. Predmet s id " + prezencka.getPredmet().getId().toString() + " v databaze neexistuje.");
         }
         
-       long idAktUcastnika = -1;
+       UUID idAktUcastnika = null;
        try {
         String sql = "INSERT INTO dochadzka (id_prezencky, id_ucastnika) VALUES (?,?)";
         
-        for (long idUcastnika : ucastnici) {
+        for (UUID idUcastnika : ucastnici) {
             idAktUcastnika = idUcastnika;
-            jdbcTemplate.update(sql, idPrezencky, idUcastnika);
+            jdbcTemplate.update(sql, idPrezencky.toString(), idUcastnika.toString());
         }
        }catch (DataIntegrityViolationException e)  {
            vymazPrezencku(idPrezencky);
-           throw new InvalidEntryDataException("Prezencka nebola ulozena. Ucastnik s id "+ idAktUcastnika+" v databaze neexistuje.");
+           throw new InvalidEntryDataException("Prezencka nebola ulozena. Ucastnik s id "+ idAktUcastnika.toString()+" v databaze neexistuje.");
        }
         return idPrezencky;
     }
 
-    public Prezencka dajPrezencku(long id) {
+    public Prezencka dajPrezencku(UUID id) {
         String sql = "SELECT prezencka.id as prezencka_id, prezencka.datum as prezencka_datum,"
                 + " prezencka.id_predmetu as prezencka_id_predmetu, predmet.id as predmet_id, predmet.nazov as predmet_nazov "
                 + " FROM prezencka JOIN predmet ON prezencka.id_predmetu = predmet.id WHERE prezencka.id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, prezenckaRowMapper, id);
+            return jdbcTemplate.queryForObject(sql, prezenckaRowMapper, id.toString());
         } catch (EmptyResultDataAccessException e) {
-            throw new PrezenckaNotFoundException("Prezencka s id " + id + " sa v databaze nenachadza.");
+            throw new PrezenckaNotFoundException("Prezencka s id " + id.toString() + " sa v databaze nenachadza.");
         }
     }
 
@@ -81,11 +73,11 @@ public class MySQLPrezenckaDao implements IPrezenckaDao {
                 + " prezencka.id_predmetu as prezencka_id_predmetu, predmet.id as predmet_id, predmet.nazov as predmet_nazov "
                 + " FROM prezencka JOIN predmet ON prezencka.id_predmetu = predmet.id JOIN dochadzka "
                 + "ON dochadzka.id_prezencky = prezencka.id WHERE dochadzka.id_ucastnika = ?";
-        return jdbcTemplate.query(sql, prezenckaRowMapper, ucastnik.getId());
+        return jdbcTemplate.query(sql, prezenckaRowMapper, ucastnik.getId().toString());
     }
 
-    public void vymazPrezencku(long id) {
+    public void vymazPrezencku(UUID id) {
         String sql = "DELETE FROM prezencka WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(sql, id.toString());
     }
 }

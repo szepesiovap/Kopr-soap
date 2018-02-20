@@ -1,16 +1,18 @@
 package entity;
 
+import java.util.UUID;
+
 public class Ucastnik {
 
-    private Long id;
+    private UUID id;
     private String meno;
     private String priezvisko;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -1,15 +1,17 @@
 package entity;
 
+import java.util.UUID;
+
 public class Predmet {
 
-    private Long id;
+    private UUID id;
     private String nazov;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

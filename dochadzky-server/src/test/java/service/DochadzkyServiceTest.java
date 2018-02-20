@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -29,11 +30,11 @@ public class DochadzkyServiceTest {
         Predmet novyPredmet = new Predmet();
         novyPredmet.setNazov("Systémové programovanie");
 
-        long idNovehoPredmetu = dochadzkyService.pridajPredmet(novyPredmet);
+        UUID idNovehoPredmetu = dochadzkyService.pridajPredmet(novyPredmet);
         int pocetPredmetovPoPridani = dochadzkyService.dajPredmety().size();
         Predmet predmetVDatabaze = dochadzkyService.dajPredmet(idNovehoPredmetu);
 
-        Assert.assertTrue(idNovehoPredmetu == predmetVDatabaze.getId());
+        Assert.assertEquals(idNovehoPredmetu,predmetVDatabaze.getId());
         Assert.assertEquals("Systémové programovanie", predmetVDatabaze.getNazov());
         Assert.assertEquals(povodnyPocetPredmetov + 1, pocetPredmetovPoPridani);
 
@@ -54,9 +55,10 @@ public class DochadzkyServiceTest {
      */
     @Test
     public void testDajPredmet() {
-        long id = 1L;
+        UUID id = UUID.fromString("aab5d5fd-70c1-11e5-a4fb-b026b977eb01");
         Predmet predmet = dochadzkyService.dajPredmet(id);
-        assertTrue(predmet.getId() == id && predmet.getNazov().equals("Matematická analýza"));
+        assertEquals(predmet.getId(),id);
+        Assert.assertEquals(predmet.getNazov(),"Matematická analýza");
     }
 
     /**
@@ -75,7 +77,7 @@ public class DochadzkyServiceTest {
     public void testPridajAVymazPrezencku() {
         int povodnyPocetPrezenciek = dochadzkyService.dajPrezencky().size();
 
-        long idPredmetu = 1L;
+        UUID idPredmetu = UUID.fromString("aab5d5fd-70c1-11e5-a4fb-b026b977eb01");
         Predmet predmet = new Predmet();
         predmet.setId(idPredmetu);
 
@@ -92,16 +94,16 @@ public class DochadzkyServiceTest {
         Date datum = new Date(calendar.getTime().getTime());
         novaPrezencka.setDatum(datum);
 
-        List<Long> listUcastnikov = new ArrayList<Long>();
-        listUcastnikov.add(1L);
-        listUcastnikov.add(3L);
-        listUcastnikov.add(5L);
+        List<UUID> listUcastnikov = new ArrayList<UUID>();
+        listUcastnikov.add(UUID.fromString("bbb5d5fd-70c1-11e5-a4fb-b026b977eb01"));
+        listUcastnikov.add(UUID.fromString("bbb5d5fd-70c1-11e5-a4fb-b026b977eb03"));
+        listUcastnikov.add(UUID.fromString("bbb5d5fd-70c1-11e5-a4fb-b026b977eb05"));
 
-        long idNovejPrezencky = dochadzkyService.pridajPrezencku(novaPrezencka, listUcastnikov);
+        UUID idNovejPrezencky = dochadzkyService.pridajPrezencku(novaPrezencka, listUcastnikov);
         int pocetPrezenciekPoPridani = dochadzkyService.dajPrezencky().size();
         Prezencka prezenckaVDatabaze = dochadzkyService.dajPrezencku(idNovejPrezencky);
 
-        Assert.assertTrue(idNovejPrezencky == prezenckaVDatabaze.getId());
+        Assert.assertEquals(idNovejPrezencky, prezenckaVDatabaze.getId());
         Assert.assertEquals("Matematická analýza", prezenckaVDatabaze.getPredmet().getNazov());
         Assert.assertEquals(datum, prezenckaVDatabaze.getDatum());
         Assert.assertEquals(povodnyPocetPrezenciek + 1, pocetPrezenciekPoPridani);
@@ -124,10 +126,10 @@ public class DochadzkyServiceTest {
      */
     @Test
     public void testDajPrezencku() {
-        Long id = 2L;
+        UUID id =UUID.fromString("ccc5d5fd-70c1-11e5-a4fb-b026b977eb02");
         Prezencka prezencka = dochadzkyService.dajPrezencku(id);
 
-        Assert.assertTrue(id == prezencka.getId());
+        Assert.assertEquals(id, prezencka.getId());
 
         int rok = 2018;
         int mesiac = 1;
@@ -160,7 +162,7 @@ public class DochadzkyServiceTest {
      */
     @Test
     public void testDajPrezenckyUcastnika() {
-        long id = 2l;
+        UUID id = UUID.fromString("bbb5d5fd-70c1-11e5-a4fb-b026b977eb02");
         Ucastnik ucastnik = new Ucastnik();
         ucastnik.setId(id);
 
@@ -182,11 +184,11 @@ public class DochadzkyServiceTest {
         Ucastnik novyUcastnik = new Ucastnik();
         novyUcastnik.setMeno("Harry");
         novyUcastnik.setPriezvisko("Potter");
-        long idNovehoUcastnika = dochadzkyService.pridajUcastnika(novyUcastnik);
+        UUID idNovehoUcastnika = dochadzkyService.pridajUcastnika(novyUcastnik);
         int pocetUcastnikovPoPridani = dochadzkyService.dajUcastnikov().size();
         Ucastnik ucastnikVDatabaze = dochadzkyService.dajUcastnika(idNovehoUcastnika);
 
-        Assert.assertTrue(idNovehoUcastnika == ucastnikVDatabaze.getId());
+        Assert.assertEquals(idNovehoUcastnika, ucastnikVDatabaze.getId());
         Assert.assertEquals("Harry", ucastnikVDatabaze.getMeno());
         Assert.assertEquals("Potter", ucastnikVDatabaze.getPriezvisko());
         Assert.assertEquals(povodnyPocetUcastnikov + 1, pocetUcastnikovPoPridani);
@@ -209,10 +211,10 @@ public class DochadzkyServiceTest {
      */
     @Test
     public void testDajUcastnika() {
-        long id = 1L;
+        UUID id = UUID.fromString("bbb5d5fd-70c1-11e5-a4fb-b026b977eb01");
         Ucastnik ucastnik = dochadzkyService.dajUcastnika(id);
 
-        Assert.assertTrue(id == ucastnik.getId());
+        Assert.assertEquals(id, ucastnik.getId());
         Assert.assertEquals("Jozko", ucastnik.getMeno());
         Assert.assertEquals("Mrkvicka", ucastnik.getPriezvisko());
     }
@@ -235,7 +237,7 @@ public class DochadzkyServiceTest {
      */
     @Test
     public void testDajUcastnikovNaPrezencke() {
-        long id = 3l;
+        UUID id = UUID.fromString("ccc5d5fd-70c1-11e5-a4fb-b026b977eb03");
         Prezencka prezencka = new Prezencka();
         prezencka.setId(id);
 
