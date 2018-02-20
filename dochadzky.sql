@@ -18,7 +18,7 @@ USE `dochadzky` ;
 -- Table `dochadzky`.`predmet`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dochadzky`.`predmet` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` VARCHAR(36) NOT NULL,
   `nazov` VARCHAR(60) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
@@ -29,7 +29,7 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `dochadzky`.`ucastnik`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dochadzky`.`ucastnik` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` VARCHAR(36) NOT NULL,
   `meno` VARCHAR(45) NOT NULL,
   `priezvisko` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
@@ -41,8 +41,8 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `dochadzky`.`prezencka`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dochadzky`.`prezencka` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_predmetu` INT(11) NOT NULL,
+  `id` VARCHAR(36) NOT NULL,
+  `id_predmetu` VARCHAR(36) NOT NULL,
   `datum` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
   INDEX `id_predmetu_idx` (`id_predmetu` ASC),
@@ -59,10 +59,8 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `dochadzky`.`dochadzka`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `dochadzky`.`dochadzka` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `id_prezencky` INT(11) NULL DEFAULT NULL,
-  `id_ucastnika` INT(11) NULL DEFAULT NULL,
-PRIMARY KEY (`id`),
+  `id_prezencky` VARCHAR(36) NULL DEFAULT NULL,
+  `id_ucastnika` VARCHAR(36) NULL DEFAULT NULL,
   INDEX `id_prezencky_idx` (`id_prezencky` ASC),
   INDEX `id_ucastnika_idx` (`id_ucastnika` ASC),
   CONSTRAINT `prezencka.id`
